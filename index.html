@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Grat Clock Tip Distributor</title>
+
+  <!-- Mobile friendly -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="style.css" />
+
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- WIDE BANNER LOGO AT TOP -->
+    <img
+      src="images/gratclock-banner-wide-1000.png"
+      srcset="
+        <!-- images/gratclock-banner-wide-500.png 500w,-->
+        <!-- images/gratclock-banner-wide-1000.png 1000w,-->
+        <!-- images/gratclock-banner-wide-1500.png 1500w-->
+      "
+      sizes="(max-width: 600px) 100vw, 500px"
+      alt="Grat Clock Logo"
+      class="logo"
+    />
+
+    <h1>Grat Clock Tip Distributor</h1>
+    <p class="subtitle">Divide tips fairly by hours, using real cash denominations.</p>
+
+    <!-- CONTROLS: TOTAL EMPLOYEES + DENOMINATIONS + TOTALS -->
+    <div class="controls-section">
+      <div class="table-wrapper">
+        <table id="controlsTable">
+          <tr>
+            <td class="label-cell">Total Employees:</td>
+            <td>
+              <!-- no preloaded value here -->
+              <input type="number" id="totalEmployees" min="1" max="999" />
+            </td>
+            <td colspan="9">
+              <button type="button" onclick="generateRows()">
+                Create Employee Rows
+              </button>
+            </td>
+          </tr>
+
+          <!-- Header row for denominations + totals -->
+          <tr>
+            <th class="label-cell">Bill Qty / Totals</th>
+            <th class="narrow-col">$100</th>
+            <th class="narrow-col">$50</th>
+            <th class="narrow-col">$20</th>
+            <th class="narrow-col">$10</th>
+            <th class="narrow-col">$5</th>
+            <th class="narrow-col">$2</th>
+            <th class="narrow-col">$1</th>
+            <th>Total Cash</th>
+            <th>Total Hours</th>
+            <th>Hourly Rate</th>
+          </tr>
+
+          <!-- Input row for bill quantities and calculated totals -->
+          <tr>
+            <td class="label-cell">Quantities & Totals:</td>
+            <td><input type="number" id="bill100" min="0" /></td>
+            <td><input type="number" id="bill50" min="0" /></td>
+            <td><input type="number" id="bill20" min="0" /></td>
+            <td><input type="number" id="bill10" min="0" /></td>
+            <td><input type="number" id="bill5" min="0" /></td>
+            <td><input type="number" id="bill2" min="0" /></td>
+            <td><input type="number" id="bill1" min="0" /></td>
+            <td><input type="number" id="totalCash" disabled /></td>
+            <td><input type="number" id="totalHours" disabled /></td>
+            <td><input type="text" id="hourlyRate" disabled /></td>
+          </tr>
+        </table>
+      </div>
+
+      <button type="button" onclick="calculateTips()">
+        Distribute Tips
+      </button>
+
+      <div class="note-error" id="errorNote"></div>
+      <div class="note-error" id="leftoverNote"></div>
+
+      <div class="note">
+        Tip: Use Tab or the Arrow Keys ↑ ↓ ← → to move around like a spreadsheet.
+      </div>
+    </div>
+
+    <!-- EMPLOYEE TABLE -->
+    <div class="table-wrapper">
+      <table id="employeeTable">
+        <thead>
+          <tr>
+            <th class="name-col">Name</th>
+            <th class="narrow-col">Hours</th>
+            <th class="narrow-col">$100</th>
+            <th class="narrow-col">$50</th>
+            <th class="narrow-col">$20</th>
+            <th class="narrow-col">$10</th>
+            <th class="narrow-col">$5</th>
+            <th class="narrow-col">$2</th>
+            <th class="narrow-col">$1</th>
+            <th class="total-each-col">Total Each</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows will be generated here -->
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="name-col label-cell" colspan="9" style="text-align:right;">
+              Total Paid:
+            </td>
+            <td class="total-each-col">
+              <input type="number" id="totalEachSum" disabled />
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
