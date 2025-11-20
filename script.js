@@ -17,7 +17,7 @@ function generateRows() {
         <input type="text" data-row="${i}" data-col="0" />
       </td>
       <td class="narrow-col">
-        <input type="number" data-row="${i}" data-col="1" min="0" step="0.01" />
+        <input type="number" data-row="${i}" data-col="1" min="0" step="0.25" />
       </td>
       <td class="narrow-col">
         <input type="number" data-row="${i}" data-col="2" disabled />
@@ -47,12 +47,11 @@ function generateRows() {
     tbody.appendChild(row);
   }
 
-  // Clear Total Paid when rows are regenerated
   const totalEachSumField = document.getElementById("totalEachSum");
   if (totalEachSumField) totalEachSumField.value = "";
 }
 
-// Clear employee money fields (denoms + total each + sum)
+// Clear employee money fields
 function clearEmployeeMoney() {
   const rows = document.querySelectorAll("#employeeTable tbody tr");
   rows.forEach((row) => {
@@ -65,7 +64,7 @@ function clearEmployeeMoney() {
   if (totalEachSumField) totalEachSumField.value = "";
 }
 
-// Update summary fields (Total Cash, Total Hours, Hourly Rate, Leftover message)
+// Update summary (totals + hourly rate + leftover message)
 function updateSummary(totalCash, totalHours, hourlyRate, leftover) {
   const totalCashField = document.getElementById("totalCash");
   const totalHoursField = document.getElementById("totalHours");
@@ -86,7 +85,7 @@ function updateSummary(totalCash, totalHours, hourlyRate, leftover) {
 
   let hrStr = "";
   if (typeof hourlyRate === "number" && !isNaN(hourlyRate) && totalHours > 0) {
-    hrStr = hourlyRate.toFixed(2); // exactly 2 decimals
+    hrStr = hourlyRate.toFixed(2);
   }
   hourlyRateField.value = hrStr;
 
@@ -102,7 +101,7 @@ function updateSummary(totalCash, totalHours, hourlyRate, leftover) {
   }
 }
 
-// Main calculation function
+// Main calculation
 function calculateTips() {
   const errorNote = document.getElementById("errorNote");
   const leftoverNote = document.getElementById("leftoverNote");
@@ -111,13 +110,11 @@ function calculateTips() {
 
   const rows = document.querySelectorAll("#employeeTable tbody tr");
 
-  // Clear any previous distribution results from employee table
   clearEmployeeMoney();
 
   const employees = [];
   let totalHours = 0;
 
-  // 1. Read employee names and hours, track which row they belong to
   rows.forEach((row, rowIndex) => {
     const inputs = row.querySelectorAll("input");
     const nameInput = inputs[0];
@@ -127,14 +124,14 @@ function calculateTips() {
     const hours = parseFloat(hoursInput.value);
 
     if (!name || isNaN(hours) || hours <= 0) {
-      return; // Skip empty or invalid rows
+      return;
     }
 
     employees.push({
       name,
       hours,
       rowIndex,
-      target: 0,  // integer whole-dollar target
+      target: 0,
       bills: { 100: 0, 50: 0, 20: 0, 10: 0, 5: 0, 2: 0, 1: 0 },
       total: 0
     });
@@ -158,7 +155,6 @@ function calculateTips() {
     return;
   }
 
-  // 2. Read bill quantities and compute total cash
   const denominations = {
     100: parseInt(document.getElementById("bill100").value) || 0,
     50: parseInt(document.getElementById("bill50").value) || 0,
@@ -182,21 +178,19 @@ function calculateTips() {
     return;
   }
 
-  // 3. Compute hourly rate and integer-dollar targets for each employee (floor)
   const hourlyRate = totalCash / totalHours;
 
   employees.forEach((emp) => {
-    const exact = hourlyRate * emp.hours;                  // float
-    const intTarget = Math.floor(exact + 1e-6);            // whole dollars (down)
+    const exact = hourlyRate * emp.hours;
+    const intTarget = Math.floor(exact + 1e-6);
     emp.target = intTarget;
     emp.total = 0;
     emp.bills = { 100: 0, 50: 0, 20: 0, 10: 0, 5: 0, 2: 0, 1: 0 };
   });
 
-  // 4. Distribute bills from largest to smallest, without overpaying anyone
   const billTypes = Object.keys(denominations)
     .map(Number)
-    .sort((a, b) => b - a); // [100, 50, 20, 10, 5, 2, 1]
+    .sort((a, b) => b - a);
 
   let assignedTotal = 0;
 
@@ -208,7 +202,6 @@ function calculateTips() {
       let bestIndex = -1;
       let bestNeed = 0;
 
-      // Choose the employee who has the most remaining need and can take this bill
       for (let j = 0; j < employees.length; j++) {
         const emp = employees[j];
         const remaining = emp.target - emp.total;
@@ -219,8 +212,6 @@ function calculateTips() {
       }
 
       if (bestIndex === -1) {
-        // No one can take this bill without exceeding their target.
-        // This bill stays unassigned and becomes part of leftover.
         continue;
       }
 
@@ -231,54 +222,48 @@ function calculateTips() {
     }
   }
 
-  // 5. Compute leftover money (unassigned cash)
   const leftover = totalCash - assignedTotal;
 
-  // If leftover is more than $4, we do NOT allow this distribution
   if (leftover > 4.0001) {
-    if (errorNote) {
-      errorNote.textContent =
-        "The leftover amount is $" +
-        leftover.toFixed(2) +
-        ", which is more than $4.00.\n" +
-        "Please break at least $" +
-        leftover.toFixed(2) +
-        " from larger bills into smaller denominations, update the bill quantities, and try again.";
-    }
-    clearEmployeeMoney();
-    updateSummary(totalCash, totalHours, hourlyRate, 0);
-    return;
+  if (errorNote) {
+    errorNote.textContent =
+      "The leftover amount is $" +
+      leftover.toFixed(2) +
+      ". Please break at least $" +
+      leftover.toFixed(2) +
+      " from larger bills into smaller denominations, update the bill quantities, and try again.";
   }
+  clearEmployeeMoney();
+  updateSummary(totalCash, totalHours, hourlyRate, 0);
+  return;
+}
 
-  // 6. Write results back into their rows
+
   const rowsArray = Array.from(rows);
   employees.forEach((emp) => {
     const row = rowsArray[emp.rowIndex];
     if (!row) return;
     const inputs = row.querySelectorAll("input");
 
-    let col = 2; // where $100 starts
+    let col = 2;
     for (let denom of billTypes) {
       const count = emp.bills[denom];
       inputs[col].value = count > 0 ? count : "";
       col++;
     }
-    // Total Each (two decimals)
     inputs[col].value = emp.total.toFixed(2);
   });
 
-  // 7. Compute Total Paid (sum of Total Each column)
   const totalPaid = employees.reduce((sum, emp) => sum + emp.total, 0);
   const totalEachSumField = document.getElementById("totalEachSum");
   if (totalEachSumField) {
     totalEachSumField.value = totalPaid.toFixed(2);
   }
 
-  // 8. Update totals, hourly rate, and leftover (flip-for-it) note (for leftover ≤ $4)
   updateSummary(totalCash, totalHours, hourlyRate, leftover);
 }
 
-// Arrow-key navigation like a spreadsheet (across employee table)
+// Arrow-key navigation
 document
   .getElementById("employeeTable")
   .addEventListener("keydown", function (e) {

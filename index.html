@@ -4,46 +4,40 @@
   <meta charset="UTF-8" />
   <title>Grat Clock Tip Distributor</title>
 
-  <!-- Mobile friendly -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="stylesheet" href="style.css" />
-
 </head>
 <body>
   <div class="page-wrapper">
     <!-- WIDE BANNER LOGO AT TOP -->
     <img
       src="images/gratclock-banner-wide-1000.png"
-      srcset="
-        <!-- images/gratclock-banner-wide-500.png 500w,-->
-        <!-- images/gratclock-banner-wide-1000.png 1000w,-->
-        <!-- images/gratclock-banner-wide-1500.png 1500w-->
-      "
-      sizes="(max-width: 600px) 100vw, 500px"
       alt="Grat Clock Logo"
       class="logo"
     />
 
     <h1>Grat Clock Tip Distributor</h1>
-    <p class="subtitle">Divide tips fairly by hours, using real cash denominations.</p>
+    <p class="subtitle">
+      This website is in the testing phase. All information received from this website should be verified.
+    </p>
 
     <!-- CONTROLS: TOTAL EMPLOYEES + DENOMINATIONS + TOTALS -->
     <div class="controls-section">
       <div class="table-wrapper">
         <table id="controlsTable">
-          <tr>
-            <td class="label-cell">Total Employees:</td>
-            <td>
-              <!-- no preloaded value here -->
-              <input type="number" id="totalEmployees" min="1" max="999" />
-            </td>
-            <td colspan="9">
-              <button type="button" onclick="generateRows()">
-                Create Employee Rows
-              </button>
-            </td>
-          </tr>
+         <tr>
+  <td class="label-cell">Total Employees:</td>
+  <td class="total-employees-input-cell">
+    <input type="number" id="totalEmployees" min="1" max="999" />
+  </td>
+  <td class="total-employees-button-cell" colspan="9">
+    <button type="button" id="createRowsBtn" onclick="generateRows()">
+      Create Employee Rows
+    </button>
+  </td>
+</tr>
+
 
           <!-- Header row for denominations + totals -->
           <tr>
@@ -77,10 +71,6 @@
         </table>
       </div>
 
-      <button type="button" onclick="calculateTips()">
-        Distribute Tips
-      </button>
-
       <div class="note-error" id="errorNote"></div>
       <div class="note-error" id="leftoverNote"></div>
 
@@ -111,10 +101,15 @@
         </tbody>
         <tfoot>
           <tr>
-            <td class="name-col label-cell" colspan="9" style="text-align:right;">
+            <td class="name-col label-cell" colspan="7" style="text-align:right;">
               Total Paid:
             </td>
-            <td class="total-each-col">
+            <td class="calculate-cell">
+              <button type="button" id="calculateBtn" onclick="calculateTips()">
+                Calculate
+              </button>
+            </td>
+            <td class="total-each-col" colspan="2">
               <input type="number" id="totalEachSum" disabled />
             </td>
           </tr>
@@ -123,8 +118,6 @@
     </div>
   </div>
 
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
-
-
