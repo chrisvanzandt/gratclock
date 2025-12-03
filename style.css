@@ -34,18 +34,49 @@ p.subtitle {
   margin-bottom: 30px;
   font-size: 18px;
 }
+/* Zebra striping for employee rows to help keep your place */
+#employeeTable tbody tr:nth-child(odd) {
+  background-color: #050505;
+}
+
+#employeeTable tbody tr:nth-child(even) {
+  background-color: #101010;
+}
+
+#employeeTable tbody tr:hover {
+  background-color: #222222;
+}
 
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
   margin-top: 10px;
 }
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 10px;
+  max-height: 70vh;    /* lets table scroll with sticky header */
+}
+
 
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 900px;
+  min-width: 800px;   /* slightly narrower overall */
 }
+.narrow-col {
+  width: 60px;
+}
+
+.name-col {
+  width: 180px;
+}
+
+.total-each-col {
+  width: 110px;
+}
+
 
 th, td {
   border: 1px solid #444;
@@ -56,6 +87,12 @@ th, td {
 th {
   background-color: #111;
   font-weight: bold;
+}
+/* Keep employee table header visible while scrolling */
+#employeeTable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .narrow-col {
@@ -108,9 +145,15 @@ input[type="text"] {
 }
 
 input[disabled] {
-  background-color: #222;
-  color: #999;
+  background-color: #111;      /* match normal inputs so it doesn't look "dead" */
+  color: #ffffff;              /* bright white text */
+  font-weight: 700;            /* bold */
 }
+/* Make employee payout numbers extra clear */
+#employeeTable input[disabled] {
+  font-size: 16px;             /* larger font for payout numbers */
+}
+
 
 button {
   margin-top: 0;
@@ -183,7 +226,32 @@ button:active {
     font-size: 16px;
   }
 
+  /* Make the tables more compact on phones */
+  table {
+    min-width: 650px;        /* smaller width on phone */
+  }
+
+  th, td {
+    padding: 3px;
+    font-size: 12px;         /* smaller text in the grids */
+  }
+
+  .name-col {
+    width: 130px;
+  }
+
+  .narrow-col {
+    width: 50px;
+  }
+
+  .total-each-col {
+    width: 80px;
+  }
+
+  /* Buttons don't stretch full-width on phone */
   button {
     width: auto;
   }
+}
+
 }
