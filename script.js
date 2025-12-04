@@ -1,3 +1,73 @@
+// Keys for localStorage
+const EMP_STORAGE_KEY = "gratclockEmployees";
+const EMP_COUNT_KEY = "gratclockTotalEmployees";
+
+function saveEmployeesToStorage() {
+  const rows = document.querySelectorAll("#employeeTable tbody tr");
+  const employees = [];
+
+  rows.forEach((row) => {
+    const inputs = row.querySelectorAll("input");
+    if (inputs.length < 2) return;
+    const name = inputs[0].value.trim();
+    const hours = inputs[1].value;
+    if (name || hours) {
+      employees.push({ name, hours });
+    }
+  });
+
+  const totalEmployeesInput = document.getElementById("totalEmployees");
+  const countValue = totalEmployeesInput ? totalEmployeesInput.value : "";
+
+  try {
+    localStorage.setItem(EMP_STORAGE_KEY, JSON.stringify(employees));
+    localStorage.setItem(EMP_COUNT_KEY, countValue || "");
+  } catch (e) {
+    console.warn("Could not save employees to storage:", e);
+  }
+}
+
+function loadEmployeesFromStorage() {
+  let savedEmployees = [];
+  let savedCount = 0;
+
+  try {
+    const savedJson = localStorage.getItem(EMP_STORAGE_KEY);
+    const savedCountStr = localStorage.getItem(EMP_COUNT_KEY);
+
+    if (savedJson) {
+      savedEmployees = JSON.parse(savedJson);
+    }
+    if (savedCountStr) {
+      savedCount = parseInt(savedCountStr, 10) || 0;
+    } else if (savedEmployees.length > 0) {
+      savedCount = savedEmployees.length;
+    }
+  } catch (e) {
+    console.warn("Could not load employees from storage:", e);
+    return;
+  }
+
+  if (!savedEmployees.length || savedCount <= 0) return;
+
+  const totalEmployeesInput = document.getElementById("totalEmployees");
+  if (totalEmployeesInput) {
+    totalEmployeesInput.value = savedCount;
+  }
+
+  // Generate rows based on saved count
+  generateRows();
+
+  const rows = document.querySelectorAll("#employeeTable tbody tr");
+  savedEmployees.forEach((emp, index) => {
+    if (!rows[index]) return;
+    const inputs = rows[index].querySelectorAll("input");
+    if (inputs.length < 2) return;
+    inputs[0].value = emp.name || "";
+    inputs[1].value = emp.hours || "";
+  });
+}
+
 // Create employee rows based on "Total Employees"
 function generateRows() {
   const tbody = document.querySelector("#employeeTable tbody");
@@ -225,19 +295,18 @@ function calculateTips() {
   const leftover = totalCash - assignedTotal;
 
   if (leftover > 4.0001) {
-  if (errorNote) {
-    errorNote.textContent =
-      "The leftover amount is $" +
-      leftover.toFixed(2) +
-      ". Please break at least $" +
-      leftover.toFixed(2) +
-      " from larger bills into smaller denominations, update the bill quantities, and try again.";
+    if (errorNote) {
+      errorNote.textContent =
+        "The leftover amount is $" +
+        leftover.toFixed(2) +
+        ". Please break at least $" +
+        leftover.toFixed(2) +
+        " from larger bills into smaller denominations, update the bill quantities, and try again.";
+    }
+    clearEmployeeMoney();
+    updateSummary(totalCash, totalHours, hourlyRate, 0);
+    return;
   }
-  clearEmployeeMoney();
-  updateSummary(totalCash, totalHours, hourlyRate, 0);
-  return;
-}
-
 
   const rowsArray = Array.from(rows);
   employees.forEach((emp) => {
@@ -259,6 +328,9 @@ function calculateTips() {
   if (totalEachSumField) {
     totalEachSumField.value = totalPaid.toFixed(2);
   }
+
+  // Save employee names + hours so they persist on this device
+  saveEmployeesToStorage();
 
   updateSummary(totalCash, totalHours, hourlyRate, leftover);
 }
@@ -293,3 +365,8 @@ document
       e.preventDefault();
     }
   });
+
+// Load saved employees on page load
+document.addEventListener("DOMContentLoaded", () => {
+  loadEmployeesFromStorage();
+});

@@ -1,5 +1,5 @@
 body {
-  background-color: #000000;         /* pure black */
+  background-color: #000000;
   color: #f5f5f5;
   font-family: "Times New Roman", Times, serif;
   margin: 0;
@@ -20,12 +20,7 @@ img.logo {
   margin: 0 auto 20px auto;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-h2 {
+h1, h2 {
   text-align: center;
   margin-bottom: 10px;
 }
@@ -37,39 +32,38 @@ p.subtitle {
   font-size: 18px;
 }
 
-/* Red note under logo */
+/* UNDER LOGO NOTICE */
 .red-note {
   color: #ff5555;
   text-align: center;
-  margin: 0 0 10px 0;
+  margin-bottom: 10px;
   font-size: 14px;
 }
 
-/* Zebra striping for employee rows to help keep your place */
+/* TABLE STRIPING */
 #employeeTable tbody tr:nth-child(odd) {
   background-color: #050505;
 }
-
 #employeeTable tbody tr:nth-child(even) {
   background-color: #101010;
 }
-
 #employeeTable tbody tr:hover {
   background-color: #222222;
 }
 
-/* Wrapper that allows horizontal scroll + vertical scroll with sticky header */
+/* SCROLL WRAPPER */
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
   margin-top: 10px;
-  max-height: 70vh;    /* lets table scroll while header stays visible */
+  max-height: 70vh;
 }
 
+/* TABLES */
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 800px;    /* slightly narrower overall on desktop */
+  min-width: 800px;
 }
 
 th, td {
@@ -83,57 +77,53 @@ th {
   font-weight: bold;
 }
 
-/* Keep employee table header visible while scrolling */
+/* STICKY TOP HEADER */
 #employeeTable thead th {
   position: sticky;
   top: 0;
   z-index: 2;
 }
 
-/* Column widths */
-.narrow-col {
-  width: 60px;
-}
-
+/* COLUMN WIDTHS */
 .name-col {
   width: 180px;
   text-align: left;
 }
-
+.narrow-col {
+  width: 60px;
+}
 .total-each-col {
   width: 110px;
 }
 
-/* Label & notes */
+/* LABELS */
 .label-cell {
   text-align: right;
   padding-right: 8px;
-  white-space: normal; /* allow wrapping for longer red note */
+  white-space: normal;
 }
-
 .red-inline-note {
   color: #ff5555;
   font-size: 11px;
   margin-left: 4px;
   display: inline-block;
-  max-width: 260px; /* keeps it from stretching the table too wide */
+  max-width: 260px;
 }
 
-/* Total employees row */
+/* TOTAL EMPLOYEES */
 .total-employees-input-cell {
-  width: 120px;              /* nice roomy input */
+  width: 120px;
 }
-
 .total-employees-button-cell {
   text-align: left;
-  padding-left: 8px;         /* moves button closer to the input */
+  padding-left: 8px;
 }
 
 .calculate-cell {
   text-align: center;
 }
 
-/* Inputs */
+/* INPUTS */
 input[type="text"],
 input[type="number"] {
   width: 100%;
@@ -145,41 +135,49 @@ input[type="number"] {
   font-family: "Times New Roman", Times, serif;
   text-align: center;
 }
-
 input[type="text"] {
   text-align: left;
 }
-
-/* Make calculated fields bright, bold, and easy to read */
 input[disabled] {
-  background-color: #111;      /* match normal inputs */
-  color: #ffffff;              /* bright white text */
-  font-weight: 700;            /* bold */
+  background-color: #111;
+  color: #ffffff;
+  font-weight: 700;
 }
 
-/* Make employee payout numbers extra clear */
+/* Payout fields bold */
 #employeeTable input[disabled] {
-  font-size: 16px;             /* larger font for payout numbers */
+  font-size: 16px;
 }
 
-/* Buttons */
+/* STICKY NAME COLUMN */
+#employeeTable th.name-col {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background-color: #111;
+}
+
+#employeeTable td.name-col {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background-color: #050505;
+}
+
+/* BUTTONS */
 button {
-  margin-top: 0;
-  padding: 6px 14px; /* same size as before */
+  padding: 6px 14px;
   font-family: "Times New Roman", Times, serif;
-  font-size: 16px;   /* same size as before */
+  font-size: 16px;
   color: #ffffff;
   background: linear-gradient(to bottom, #1a8cff, #005fd1);
   border: 1px solid #003f8c;
-  border-radius: 6px;                  /* soft bevel */
+  border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.4),
-              inset 0 1px 0 rgba(255,255,255,0.25); /* raised look */
-  text-shadow: 0 1px 1px rgba(0,0,0,0.7);          /* raised letters */
+              inset 0 1px 0 rgba(255,255,255,0.25);
+  text-shadow: 0 1px 1px rgba(0,0,0,0.7);
   cursor: pointer;
-  transition:
-    background 0.15s ease,
-    box-shadow 0.15s ease,
-    transform 0.1s ease;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
 }
 
 button:hover {
@@ -189,14 +187,9 @@ button:hover {
 }
 
 button:active {
-  transform: translateY(1px); /* subtle “press in” */
+  transform: translateY(1px);
   box-shadow: 0 1px 2px rgba(0,0,0,0.5),
               inset 0 1px 2px rgba(0,0,0,0.5);
-}
-
-/* Helper notes */
-.controls-section {
-  margin-bottom: 20px;
 }
 
 .note {
@@ -204,104 +197,35 @@ button:active {
   margin-top: 8px;
   color: #cccccc;
 }
-
 .note-error {
   font-size: 14px;
-  margin-top: 8px;
   color: #ff5555;
   font-weight: bold;
+  margin-top: 8px;
 }
 
-/* Contact section (if you are using it) */
-#contact {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #444;
-}
-
-#contact h2 {
-  text-align: center;
-  color: #ffffff;
-  margin-bottom: 10px;
-}
-
-.contact-note {
-  text-align: center;
-  color: #cccccc;
-  margin-bottom: 20px;
-  font-size: 14px;
-}
-
-.contact-form {
-  max-width: 500px;
-  margin: 0 auto 40px auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.contact-form label {
-  display: flex;
-  flex-direction: column;
-  color: #ffffff;
-  font-size: 14px;
-}
-
-.contact-form input,
-.contact-form textarea {
-  background-color: #111;
-  border: 1px solid #555;
-  color: #f5f5f5;
-  padding: 6px;
-  font-family: "Times New Roman", Times, serif;
-  font-size: 14px;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.contact-form textarea {
-  resize: vertical;
-}
-
-.contact-btn {
-  margin-top: 10px;
-  width: 150px;
-  align-self: center;
-}
-
-/* Mobile adjustments */
+/* MOBILE LAYOUT */
 @media (max-width: 768px) {
   body {
     padding: 10px;
   }
 
-  p.subtitle {
-    font-size: 16px;
-  }
-
-  /* Make the tables more compact on phones */
   table {
-    min-width: 650px;        /* smaller width on phone */
+    min-width: 650px;
   }
 
   th, td {
     padding: 3px;
-    font-size: 12px;         /* smaller text in the grids */
+    font-size: 12px;
   }
 
   .name-col {
     width: 130px;
   }
-
   .narrow-col {
     width: 50px;
   }
-
   .total-each-col {
     width: 80px;
-  }
-
-  button {
-    width: auto;
   }
 }
