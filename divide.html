@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calculate and Divide Tips</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-wrapper">
+    <img
+      src="images/gratclock-banner-wide-1000.png"
+      alt="Grat Clock Logo"
+      class="logo"
+    />
+
+    <div class="top-nav">
+      <a class="link-btn" href="index.html">← Back</a>
+    </div>
+
+    <h1>Calculate and Divide Tips</h1>
+
+    <p class="red-note">
+      If you're using a cell phone, rotate it sideways for a better experience.
+    </p>
+
+    <p class="subtitle">
+      This page calculates totals + hourly rate + what each employee should receive.
+      It does NOT assign physical bills.
+    </p>
+
+    <!-- CONTROLS -->
+    <div class="controls-section">
+      <div class="table-wrapper">
+        <table id="controlsTable">
+          <tr>
+            <td class="label-cell">Total Employees:</td>
+            <td class="total-employees-input-cell">
+              <input type="number" id="totalEmployees" min="1" max="999" />
+            </td>
+            <td class="total-employees-button-cell" colspan="3">
+              <button type="button" onclick="generateRows()">Create Employee Rows</button>
+            </td>
+          </tr>
+
+          <tr>
+            <th class="label-cell">Totals</th>
+            <th>Total Tips</th>
+            <th>Total Hours</th>
+            <th>Hourly Rate</th>
+          </tr>
+
+          <tr>
+            <td class="label-cell">
+              Total Tips:
+              <span class="red-inline-note">
+                Enter the total tip dollars to divide.
+              </span>
+            </td>
+            <td><input type="number" id="totalTips" min="0" step="1" /></td>
+            <td><input type="number" id="totalHours" disabled /></td>
+            <td><input type="text" id="hourlyRate" disabled /></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="note-error" id="errorNote"></div>
+
+      <div class="note">
+        Tip: Use Tab or the Arrow Keys ↑ ↓ ← → to move around like a spreadsheet.
+      </div>
+    </div>
+
+    <!-- EMPLOYEE TABLE (simple) -->
+    <div class="table-wrapper">
+      <table id="employeeTable">
+        <thead>
+          <tr>
+            <th class="name-col">Name</th>
+            <th class="narrow-col">Hours</th>
+            <th class="total-each-col">Total Each</th>
+          </tr>
+        </thead>
+
+        <tbody></tbody>
+
+        <tfoot>
+          <tr>
+            <td class="name-col label-cell" colspan="1" style="text-align:right;">
+              Total Paid:
+            </td>
+            <td class="calculate-cell">
+              <button type="button" onclick="calculateDivide()">Calculate</button>
+            </td>
+            <td class="total-each-col">
+              <input type="number" id="totalEachSum" disabled />
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <script src="divide.js"></script>
+</body>
+</html>
